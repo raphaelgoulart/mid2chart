@@ -2,7 +2,7 @@
 
 #### 1.0 (current version) 11/11/2016
 Additions:
-* Added 1/16 strums support (For songs like Snow ((Hey Oh)))
+* Added 1/16 strums support (for songs like Snow ((Hey Oh)))
 * Added the -16 parameter, which will set the HO/PO threshold to 1/16 if the song.ini didn't set it already - in such case, the -16 parameter will revert it back to the default 1/12.
 * Added the -u parameter, which disables NAudio's strict midi file checking. Useful if NAudio throws an error when reading a midi file, but might result in some conversion inaccuracy.
 
