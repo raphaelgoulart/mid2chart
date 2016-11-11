@@ -32,6 +32,7 @@ PART KEYS is also converted, placed in the Enhanced Guitar part. It is ignored b
 * Use the -kb parameter to swap keys and bass when converting the midi.
 * Use the -kg parameter to swap keys and guitar when converting the midi.
 * Use the -gb parameter to swap guitar and bass when converting the midi.
+
 Be aware that you can only use ONE of the track swapping parameters. If you use more than one, only the first one entered will be considered.
 To easily add those parameters, edit the .bat file and drag/drop the .mid file into it.
 
@@ -41,7 +42,7 @@ If the converter doesn't read the midi properly (it gives an error after the Pro
 If you have any other issues, just send a message to raphaelgoulart#1573 on Discord.
 
 ## License
-This software is released under the MIT license. You're free to use it and modify it as you will, as long as you read and agree with its license.
+This software is released under the [MIT license](LICENSE). You're free to use it and modify it as you will, as long as you read and agree with its license.
 
 ## Credits and Special Thanks
 This software uses [NAudio](https://github.com/naudio/NAudio/), released under the Ms-PL license, and unphook's [Stopwatch.cs](https://github.com/unphook/rock-porra/blob/master/forfopacker/Stopwatch.cs), released under the MIT license.
