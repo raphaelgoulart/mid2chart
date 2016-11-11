@@ -3,13 +3,19 @@ Rock Band/Phase Shift .mid to GH3PC/FeedBack .chart file converter
 
 ## Description
 This is a tool made to convert Rock Band / Phase Shift .mid files to .chart, so they can be imported into GH3PC using GHTCP.
+
 If the midi file has tap notes - such as the Phase Shift version of GH:WT> songs - it'll output 2 charts: a (Dummy).chart one, and the actual .chart. To properly import those, please refer to [this tutorial](https://youtu.be/We0E4iyKJ1M?t=13m53s) by Plumato.
+
 To make sure tap notes work, you should use ExileLord's [GH3+](https://youtu.be/EbapUSs5fsg) hack.
+You can find changelog and pre-GitHub versions [here](CHANGELOG.md).
 
 ## Usage
 Drag and drop the mid file into "mid2chart.exe" or the .bat included. (The .mid file must be in the same folder of the .bat if you're using it.)
+
 If there is a song.ini file in the same folder as the mid, the converter will use its metadata to set the song name, artist, year, charter and offset attributes in the converted chart file.
+
 If the song.ini specifies a 1/8 HO/PO threshold, the converter will force HO/POs accordingly so the converted chart file matches that.
+
 PART KEYS is also converted, placed in the Enhanced Guitar part. It is ignored by GHTCP, but can be found by opening the chart in FeedBack and pressing F4.
 
 ## Parameters
@@ -37,8 +43,10 @@ Be aware that you can only use ONE of the track swapping parameters. If you use 
 To easily add those parameters, edit the .bat file and drag/drop the .mid file into it.
 
 ## Troubleshooting
-If you're having problems with notes not being properly forced and the -f/-s parameters don't help, try opening the .mid in EoF, going into Settings and setting Min. note length (ms) as 18, resaving the project and converting the resaved .mid (thanks Notyu1459 for this solution).
-If the converter doesn't read the midi properly (it gives an error after the Program Started! line), try resaving it with a midi editing software (REAPER, Anvil Studio or Sekaiju, for instance).
+If you're having problems with notes not being properly forced and the -f/-s parameters don't help, try opening the .mid in EoF, going into Settings and setting Min. note length (ms) as 18, resaving the project and converting the resaved .mid (thanks ScoreHero user "Notyu1459" for this solution).
+
+If the converter doesn't read the midi properly (it gives an error after the Program Started! line), try using the -u parameter. If that doesn't work, try resaving it with a midi editing software (REAPER, Anvil Studio or Sekaiju, for instance).
+
 If you have any other issues, just send a message to raphaelgoulart#1573 on Discord.
 
 ## License
@@ -46,4 +54,5 @@ This software is released under the [MIT license](LICENSE). You're free to use i
 
 ## Credits and Special Thanks
 This software uses [NAudio](https://github.com/naudio/NAudio/), released under the Ms-PL license, and unphook's [Stopwatch.cs](https://github.com/unphook/rock-porra/blob/master/forfopacker/Stopwatch.cs), released under the MIT license.
+
 Special thanks to Plumato and the579GH for the testing, suggestions, help and support provided.
