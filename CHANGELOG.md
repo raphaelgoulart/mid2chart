@@ -7,6 +7,7 @@ Additions:
 * Added the -u parameter, which disables NAudio's strict midi file checking. Useful if NAudio throws an error when reading a midi file, but might result in some conversion inaccuracy.
 
 Improvements:
+* Updated the NAudio library to the most recent version as of this release's date.
 
 Previous versions were released outside of GitHub and didn't have a proper version name, so I'm identifying them by their release dates.
 
