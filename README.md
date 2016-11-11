@@ -7,7 +7,8 @@ This is a tool made to convert Rock Band / Phase Shift .mid files to .chart, so 
 If the midi file has tap notes - such as the Phase Shift version of GH:WT> songs - it'll output 2 charts: a (Dummy).chart one, and the actual .chart. To properly import those, please refer to [this tutorial](https://youtu.be/We0E4iyKJ1M?t=13m53s) by Plumato.
 
 To make sure tap notes work, you should use ExileLord's [GH3+](https://youtu.be/EbapUSs5fsg) hack.
-You can find changelog and pre-GitHub versions [here](CHANGELOG.md).
+
+You can find the changelog and pre-GitHub versions [here](CHANGELOG.md).
 
 ## Usage
 Drag and drop the mid file into "mid2chart.exe" or the .bat included. (The .mid file must be in the same folder of the .bat if you're using it.)
