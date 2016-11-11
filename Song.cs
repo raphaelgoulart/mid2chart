@@ -93,8 +93,7 @@ namespace mid2chart {
             if (eKeys.Count > 0) eKeys = FixBrokenChords(eKeys, 8);
         }
 
-        private List<Event> FixBrokenChords(List<Event> notes, int sec)
-        {
+        private List<Event> FixBrokenChords(List<Event> notes, int sec) {
             var fixedNotes = new List<Event>();
             foreach (var n in notes)
             {
@@ -138,8 +137,7 @@ namespace mid2chart {
             return fixedNotes;
         }
 
-        private List<NoteSection> AddForceHopoIfNecessary(long tick, List<NoteSection> forceHOPO, List<NoteSection> forceStrum)
-        {
+        private List<NoteSection> AddForceHopoIfNecessary(long tick, List<NoteSection> forceHOPO, List<NoteSection> forceStrum) {
             List<NoteSection> added = forceHOPO;
             int i; bool check = true;
             foreach (var ns in forceStrum)
@@ -214,8 +212,7 @@ namespace mid2chart {
             return fixedNotes;
         }
 
-        internal void RemoveDuplicates()
-        {
+        internal void RemoveDuplicates() {
             if (xGuitar.Count > 0) xGuitar = RemoveDuplicates(xGuitar);
             if (hGuitar.Count > 0) hGuitar = RemoveDuplicates(hGuitar);
             if (mGuitar.Count > 0) mGuitar = RemoveDuplicates(mGuitar);
@@ -258,8 +255,7 @@ namespace mid2chart {
             return false;
         }
 
-        private bool IsPartOfBrokenChord(Note n, List<Event> notes)
-        {
+        private bool IsPartOfBrokenChord(Note n, List<Event> notes) {
             if (n == null) return false;
             if (notes[0] == n) return false;
             var previousNote = GetPreviousNote(n, notes);

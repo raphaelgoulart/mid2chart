@@ -117,19 +117,19 @@ namespace mid2chart {
                             if (editable) {
                                 string filename = args[i].Substring(0, args[i].Length-4) + " (editable).chart";
                                 Stopwatch.Step("Writing chart: " + filename);
-                                ChartWriter.writeChart(s, filename, false);
+                                ChartWriter.WriteChart(s, filename, false);
                                 Stopwatch.EndStep();
                             } else {
                                 string filename;
                                 if (!dontWriteDummy && (s.tapGuitar.Count() > 0 || s.tapBass.Count() > 0)) {
                                     filename = args[i].Substring(0, args[i].Length-4) + " (Dummy).chart";
                                     Stopwatch.Step("Writing chart: " + filename);
-                                    ChartWriter.writeChart(s, filename, true);
+                                    ChartWriter.WriteChart(s, filename, true);
                                     Stopwatch.EndStep();
                                 }
                                 filename = args[i].Substring(0, args[i].Length-3) + "chart";
                                 Stopwatch.Step("Writing chart: " + filename);
-                                ChartWriter.writeChart(s, filename, false);
+                                ChartWriter.WriteChart(s, filename, false);
                                 Stopwatch.EndStep();
                                 Stopwatch.Stop();
                             }

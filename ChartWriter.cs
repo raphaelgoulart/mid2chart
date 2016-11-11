@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using mid2chart;
 
 namespace mid2chart {
     internal static class ChartWriter {
         private static bool dummy;
         private static int hopoThresh = 64;
-        internal static void writeChart(Song s, string path, bool dummy) {
+        internal static void WriteChart(Song s, string path, bool dummy) {
             if (Program.eighthHopo) hopoThresh = 96;
             if (Program.sixteenthStrum) hopoThresh = 32;
             ChartWriter.dummy = dummy;
@@ -19,7 +18,7 @@ namespace mid2chart {
                     if (s.artist != "") file.WriteLine("\tArtist = \"" + s.artist + "\"");
                     if (s.year != "") file.WriteLine("\tYear = \", " + s.year + "\"");
                     if (s.charter != "") file.WriteLine("\tCharter = \"" + s.charter + "\"");
-                    file.WriteLine("\tOffset = " + getOffsetString(s.offset));
+                    file.WriteLine("\tOffset = " + GetOffsetString(s.offset));
                     file.WriteLine("\tResolution = 192");
                     file.WriteLine("\tPlayer2 = bass");
                     file.WriteLine("\tDifficulty = 0");
@@ -146,7 +145,7 @@ namespace mid2chart {
             }
         }
 
-        private static string getOffsetString(long offset) {
+        private static string GetOffsetString(long offset) {
             var str = "";
             if (offset < 0) {
                 str = "-";
@@ -201,8 +200,7 @@ namespace mid2chart {
         }
 
         private static
-            bool IsForced(Note n, List<Event> notes, List<NoteSection> forceHOPO, List<NoteSection> forceStrum, List<NoteSection> openNotes)
-        {
+            bool IsForced(Note n, List<Event> notes, List<NoteSection> forceHOPO, List<NoteSection> forceStrum, List<NoteSection> openNotes) {
             bool check = false;
             long tickDiff = GetPreviousNoteDiff(n, notes);
             if (tickDiff <= hopoThresh && !IsChord(n, notes) && !SameNoteAsPrevious(n, notes, openNotes))

@@ -30,7 +30,7 @@ PART KEYS is also converted, placed in the Enhanced Guitar part. It is ignored b
 * Use the -c parameter to avoid forcing chords (useful for non-GH3+ users or console players).
 * Use the -o parameter to clip sustains and/or fix overlapping notes.
 * Use the -8 parameter to set 1/8 notes as HO/POs, OR to set it back to default if the .ini file already specifies such condition.
-* Use the -8 parameter to set 1/16 notes as strums, OR to set it back to default if the .ini file already specifies such condition.
+* Use the -16 parameter to set 1/16 notes as strums, OR to set it back to default if the .ini file already specifies such condition.
 * Use the -1 parameter to check midi note 103 for star power, instead of 116.
 * Use the -m parameter to NOT create a (Dummy).chart file.
 * Use the -k parameter to close the program after the conversion, instead of waiting for a keystroke.

@@ -3,7 +3,7 @@
 #### 1.0 (current version) 11/11/2016
 Additions:
 * Added 1/16 strums support (for songs like Snow ((Hey Oh)))
-* Added the -16 parameter, which will set the HO/PO threshold to 1/16 if the song.ini didn't set it already - in such case, the -16 parameter will revert it back to the default 1/12.
+* Added the -16 parameter, which will set the HO/PO threshold to 1/16 only if the song.ini didn't set it already - if it already did, the -16 parameter will revert it back to the default 1/12.
 * Added the -u parameter, which disables NAudio's strict midi file checking. Useful if NAudio throws an error when reading a midi file, but might result in some conversion inaccuracy.
 
 Improvements:
@@ -35,7 +35,7 @@ The conversor also forces open notes that are close to another (different) note 
 Additions:
 * Reads delay (offset) from song.ini, and adapts it accordingly (ex. 253 to 0.253).
 * Reads hopo_frequency and eighthnote_hopo from song.ini - if the former is 250 and/or the latter is 1, the song has a 1/8 HO/PO threshold, and the converter will force notes accordingly.
-* The -8 parameter will only set the HO/PO threshold to 1/8 if the song.ini didn't set it already - in this case, the -8 parameter will revert it back to the default 1/12.
+* The -8 parameter will only set the HO/PO threshold to 1/8 if the song.ini didn't set it already - if it already did, the -8 parameter will revert it back to the default 1/12.
 * The -k parameter (swap keys and bass) has been renamed to -kb.
 * Added the -kg parameter, which swaps keys and guitar.
 * Added the -gb parameter, which swaps guitar and bass.
