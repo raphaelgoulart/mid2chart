@@ -6,6 +6,8 @@ Additions:
 * Added the -16 parameter, which will set the HO/PO threshold to 1/16 if the song.ini didn't set it already - in such case, the -16 parameter will revert it back to the default 1/12.
 * Added the -u parameter, which disables NAudio's strict midi file checking. Useful if NAudio throws an error when reading a midi file, but might result in some conversion inaccuracy.
 
+Improvements:
+
 Previous versions were released outside of GitHub and didn't have a proper version name, so I'm identifying them by their release dates.
 
 You can find links for those old versions at the bottom of this file.
