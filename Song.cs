@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace mid2chart {
     internal class Song {
@@ -49,6 +50,30 @@ namespace mid2chart {
         public List<NoteSection> mBassOpenNotes = new List<NoteSection>();
         public List<NoteSection> hBassOpenNotes = new List<NoteSection>();
         public List<NoteSection> xBassOpenNotes = new List<NoteSection>();
+
+        internal void TapToHopo() {
+            if(tapGuitar.Count > 0) {
+                eGuitarForceHOPO = TapToHopo(eGuitarForceHOPO,tapGuitar);
+                mGuitarForceHOPO = TapToHopo(mGuitarForceHOPO,tapGuitar);
+                hGuitarForceHOPO = TapToHopo(hGuitarForceHOPO,tapGuitar);
+                xGuitarForceHOPO = TapToHopo(xGuitarForceHOPO,tapGuitar);
+                tapGuitar.Clear();
+            }
+            if(tapBass.Count > 0) {
+                eBassForceHOPO = TapToHopo(eBassForceHOPO,tapBass);
+                mBassForceHOPO = TapToHopo(mBassForceHOPO,tapBass);
+                hBassForceHOPO = TapToHopo(hBassForceHOPO,tapBass);
+                xBassForceHOPO = TapToHopo(xBassForceHOPO,tapBass);
+                tapBass.Clear();
+            }
+        }
+
+        private List<NoteSection> TapToHopo(List<NoteSection> forceHOPO, List<NoteSection> tap) {
+            foreach(NoteSection t in tap) {
+                forceHOPO.Add(t);
+            }
+            return forceHOPO.OrderBy(f => f.tick).ToList();
+        }
 
         internal void FixOverlaps() {
             if (xGuitar.Count > 0) xGuitar = FixOverlaps(xGuitar);

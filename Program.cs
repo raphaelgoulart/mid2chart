@@ -6,7 +6,7 @@ namespace mid2chart {
     static class Program {
         internal static bool editable, rbLogic, broken, fixForces, fixSp, fixDoubleHopo, dontForceChords, 
             fixOverlaps, eighthHopo, sixteenthStrum, keysOnBass, keysOnGuitar, bassOnGuitar,
-            gh1, skipPause, readOpenNotes, dontWriteDummy, dontForceOpenHopo, unforceNAudioStrictMode;
+            gh1, skipPause, readOpenNotes, dontWriteDummy, dontForceOpenHopo, unforceNAudioStrictMode, tapToHopo;
         static void Main(string[] args) {
             if (args.Length == 0) {
                 Console.WriteLine("Usage: drag and drop one or more .mid files into this executable file.");
@@ -18,6 +18,7 @@ namespace mid2chart {
                 Console.WriteLine("Use the parameter \"-u\" to unforce NAudio's strict midi checking.");
                 Console.WriteLine("Use the parameter \"-d\" to remove double HO/POs.");
                 Console.WriteLine("Use the parameter \"-c\" to avoid forcing chords (useful for non-GH3+ users or console players).");
+                Console.WriteLine("Use the parameter \"-t\" to convert tap notes as forced HO/POs (useful for non-GH3+ users or console players).");
                 Console.WriteLine("Use the parameter \"-o\" to clip overlapping sustains.");
                 Console.WriteLine("Use the parameter \"-8\" to set HO/PO threshold to 1/8. If the song.ini already specifies a 1/8 HO/PO threshold, use this parameter to set it back to 1/12.");
                 Console.WriteLine("Use the parameter \"-16\" to set 1/16 notes as strums. If the song.ini already specifies that, use this parameter to set it back to default.");
@@ -42,6 +43,7 @@ namespace mid2chart {
                         case "-u": unforceNAudioStrictMode = true; break;
                         case "-d": fixDoubleHopo = true; break;
                         case "-c": dontForceChords = true; break;
+                        case "-t": tapToHopo = true; break;
                         case "-o": fixOverlaps = true; break;
                         case "-8": eighthHopo = true; break;
                         case "-16": sixteenthStrum = true; break;
@@ -83,7 +85,7 @@ namespace mid2chart {
                         && (args[i] != "-16") && (args[i] != "-kb") && (args[i] != "-kg")
                         && (args[i] != "-gb") && (args[i] != "-1") && (args[i] != "-k")
                         && (args[i] != "-p") && (args[i] != "-m") && (args[i] != "-oh")
-                        && (args[i] != "-u")) {
+                        && (args[i] != "-u") && (args[i] != "-t")) {
                         try {
                             Stopwatch.Step("Reading midi: " + args[i]);
                             Song s = MidReader.ReadMidi(args[i],unforceNAudioStrictMode);
@@ -97,6 +99,11 @@ namespace mid2chart {
                             if (!broken) {
                                 Stopwatch.Step("Fixing broken chords");
                                 s.FixBrokenChords();
+                                Stopwatch.EndStep();
+                            }
+                            if (tapToHopo) {
+                                Stopwatch.Step("Converting tap sections to force HO/PO sections");
+                                s.TapToHopo();
                                 Stopwatch.EndStep();
                             }
                             if (fixForces) {

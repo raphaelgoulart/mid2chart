@@ -28,6 +28,7 @@ PART KEYS is also converted, placed in the Enhanced Guitar part. It is ignored b
 * Use the -u parameter to unforce NAudio's strict midi checking. This might help if NAudio throws an error when trying to open a midi file, but might cause inaccuracies in the conversion.
 * Use the -d parameter to remove double HO/POs.
 * Use the -c parameter to avoid forcing chords (useful for non-GH3+ users or console players).
+* Use the -t parameter to convert tap notes as forced HO/POs instead (useful for non-GH3+ users or console players).
 * Use the -o parameter to clip sustains and/or fix overlapping notes.
 * Use the -8 parameter to set 1/8 notes as HO/POs, OR to set it back to default if the .ini file already specifies such condition.
 * Use the -16 parameter to set 1/16 notes as strums, OR to set it back to default if the .ini file already specifies such condition.

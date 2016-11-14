@@ -1,6 +1,11 @@
 #Changelog
 
-#### 1.0 (current version) 11/11/2016
+#### 1.1 (14/11/2016)
+Additions:
+* Added the -t parameter, which converts tap notes as forced HO/POs instead (useful for non-GH3+ users, or console players).
+  * Should be used along with -c for full compatibility.
+
+#### 1.0 (11/11/2016)
 Additions:
 * Added 1/16 strums support (for songs like Snow ((Hey Oh)))
 * Added the -16 parameter, which will set the HO/PO threshold to 1/16 only if the song.ini didn't set it already - if it already did, the -16 parameter will revert it back to the default 1/12.
@@ -20,7 +25,7 @@ Additions:
 * Added the -m command to NOT create a (Dummy).chart file.
 * Added the -k command to close the program right after the conversion, instead of waiting for a keystroke.
 * Added the -p parameter to read and write open notes (as N 7 0, or E O for editable version).*
-* Added the -oh parameter to NOT automatically force open notes that are 1/12 or closer to another note as open HO/POs (useless without -p)
+* Added the -oh parameter to NOT automatically force open notes that are 1/12 or closer to another note as open HO/POs (useless without -p).
 
 Bugfixes:
 - Fixes a bug on which a tap section that contained a single tap note might not be converted as a tap note in some cases.
@@ -47,7 +52,7 @@ Additions:
  
 #### 30/04/2016
 Additions:
-* Added the -8 parameter, which sets the HO/PO threshold to 1/8. (Default is 1/12)
+* Added the -8 parameter, which sets the HO/PO threshold to 1/8. (Default is 1/12).
  
 #### 27/04/2016
 Additions:
