@@ -3,7 +3,7 @@
 #### 1.1 (14/11/2016)
 Additions:
 * Added the -t parameter, which converts tap notes as forced HO/POs instead (useful for non-GH3+ users, or console players).
-  * Should be used along with -c for full compatibility.
+  * Should be used along with -c for full vanilla GH3 compatibility.
 
 #### 1.0 (11/11/2016)
 Additions:
