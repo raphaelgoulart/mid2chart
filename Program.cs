@@ -26,7 +26,7 @@ namespace mid2chart {
                 Console.WriteLine("Use the parameter \"-k\" to skip the \"Press any key to exit\" message, and just exit.");
                 Console.WriteLine("Use the parameter \"-m\" to NOT write a (Dummy).chart file");
                 Console.WriteLine("Use the parameter \"-p\" to read and write open notes.");
-                Console.WriteLine("Use the parameter \"-os\" to convert open notes as ");
+                Console.WriteLine("Use the parameter \"-os\" to convert open notes as strum by default, unless forced otherwise.");
                 Console.WriteLine("Use the parameter \"-kb\" to swap keys and bass when converting the midi.");
                 Console.WriteLine("Use the parameter \"-kg\" to swap keys and guitar when converting the midi.");
                 Console.WriteLine("Use the parameter \"-gb\" to swap guitar and bass when converting the midi.");

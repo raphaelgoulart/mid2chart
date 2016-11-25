@@ -1,5 +1,15 @@
 #Changelog
 
+#### 1.2 (25/11/2016)
+Adittions:
+* Added the -os parameter, to convert open notes as strum by default, unless forced otherwise.
+
+Improvements:
+* Adapted the open note converting logic to work with the upcoming GH3+ update (which adds open notes, obviously).
+
+Removals:
+* Removed the -oh parameter.
+
 #### 1.1 (14/11/2016)
 Additions:
 * Added the -t parameter, which converts tap notes as forced HO/POs instead (useful for non-GH3+ users, or console players).

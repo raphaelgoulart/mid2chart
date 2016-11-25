@@ -36,7 +36,7 @@ PART KEYS is also converted, placed in the Enhanced Guitar part. It is ignored b
 * Use the -m parameter to NOT create a (Dummy).chart file.
 * Use the -k parameter to close the program after the conversion, instead of waiting for a keystroke.
 * Use the -p parameter to read and write open notes (as N 7 0 or E O).
-* Use the -oh parameter to NOT automatically force open notes that are 1/12 or closer to another note as HO/POs (useless without -p).
+* Use the -os parameter to force open notes as strum by default, unless forced otherwise. (useless without -p).
 * Use the -kb parameter to swap keys and bass when converting the midi.
 * Use the -kg parameter to swap keys and guitar when converting the midi.
 * Use the -gb parameter to swap guitar and bass when converting the midi.
