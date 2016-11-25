@@ -159,36 +159,29 @@ namespace mid2chart {
             return str;
         }
 
-        private static void WriteNotes(StreamWriter file, List<Event> notes, List<NoteSection> forceHOPO, List<NoteSection> forceStrum, List<NoteSection> tap, List<NoteSection>openNotes, bool isKeys) {
+        private static void WriteNotes(StreamWriter file, List<Event> notes, List<NoteSection> forceHOPO, List<NoteSection> forceStrum, List<NoteSection> tap, List<NoteSection> openNotes, bool isKeys) {
             foreach (Event e in notes) {
                 var n = e as Note;
                 if (n != null) {
-                    file.WriteLine("\t" + n.tick + " = N " + n.note + " " + n.sus);
+                    if (Program.readOpenNotes && IsTap(n, openNotes)) {
+                        if (dummy || Program.editable)
+                            file.WriteLine("\t" + n.tick + " = E O");
+                        else
+                            file.WriteLine("\t" + n.tick + " = N 7 " + n.sus);
+                    } else {
+                        file.WriteLine("\t" + n.tick + " = N " + n.note + " " + n.sus);
+                    }
                     if (GetNextNoteDiff(n, notes) > 0) {
-                        if (IsTap(n, tap))
+                        if (IsTap(n, tap) && !IsTap(n, openNotes))
                             if (dummy || Program.editable)
                                 file.WriteLine("\t" + n.tick + " = E T");
                             else
                                 file.WriteLine("\t" + n.tick + " = N 6 0");
-                        else {
-                            if (Program.readOpenNotes && IsTap(n, openNotes)) {
-                                //the same method to read taps also work to read open notes
-                                //since it just reads from a NoteSection list
-                                //and says if the Note n is inside of such list
-                                //doesnt matter if the list is for tap sections
-                                //or open note section or whatever
-                                if (dummy || Program.editable)
-                                    file.WriteLine("\t" + n.tick + " = E O");
-                                else
-                                    file.WriteLine("\t" + n.tick + " = N 7 0");
-                            }
-                            if ((!isKeys && IsForced(n, notes, forceHOPO, forceStrum, openNotes)) || (isKeys && IsForcedKeys(n, notes)))
-                                if (Program.editable)
-                                    file.WriteLine("\t" + n.tick + " = E F");
-                                else
-                                    file.WriteLine("\t" + n.tick + " = N 5 0");
-                        }
-
+                        else if ((!isKeys && IsForced(n, notes, forceHOPO, forceStrum, openNotes)) || (isKeys && IsForcedKeys(n, notes)))
+                            if (Program.editable)
+                                file.WriteLine("\t" + n.tick + " = E F");
+                            else
+                                file.WriteLine("\t" + n.tick + " = N 5 0");
                     }
                     continue;
                 }
@@ -203,64 +196,37 @@ namespace mid2chart {
             bool IsForced(Note n, List<Event> notes, List<NoteSection> forceHOPO, List<NoteSection> forceStrum, List<NoteSection> openNotes) {
             bool check = false;
             long tickDiff = GetPreviousNoteDiff(n, notes);
-            if (tickDiff <= hopoThresh && !IsChord(n, notes) && !SameNoteAsPrevious(n, notes, openNotes))
-            {
-                if (Program.rbLogic && ContainsNoteFromPreviousChord(n, notes))
-                {
+            if (tickDiff <= hopoThresh && !IsChord(n, notes) && !SameNoteAsPrevious(n, notes, openNotes)) {
+                if ((Program.rbLogic && ContainsNoteFromPreviousChord(n, notes)) || (Program.readOpenNotes && Program.openNoteStrum && IsTap(n, openNotes))) {
                     //applies harmonix's post-chord ho/po logic
                     //this means that this note contains a note from the previous chord
                     //therefore it's a strum, unless it's forced otherwise
                     //so, look on forceHOPO
+                    //also works when forcing open notes as strum by default
+                    //unless forced otherwise ofc
                     check = true;
-                    foreach (var hopo in forceHOPO)
-                    {
+                    foreach (var hopo in forceHOPO) {
                         if (hopo.tick > n.tick) break;
-                        if (n.tick >= hopo.tick && n.tick < (hopo.tick + hopo.sus))
-                        {
+                        if (n.tick >= hopo.tick && n.tick < (hopo.tick + hopo.sus)) {
                             check = false;
                             break;
                         }
                     }
-                }
-                else if (Program.readOpenNotes && !Program.dontForceOpenHopo && IsTap(n, openNotes))
-                {
-                    //this means it's a std note going to an open note
-                    //but since open notes are strum by default, 
-                    //they need to be forced otherwise to be ho/pos
-                    check = true;
-                    //so, them being ho/pos but forced, we must
-                    //look on the forceStrum list to unforce them
-                    //if it's an open strum
-                    foreach (var s in forceStrum)
-                    {
-                        if (s.tick > n.tick) break;
-                        if (n.tick >= s.tick && n.tick < (s.tick + s.sus))
-                        {
-                            check = false; break;
-                        }
-                    }
-                }
-                else
-                {
+                } else {
                     //regular HOPO - look on forceStrum
-                    foreach (var s in forceStrum)
-                    {
+                    foreach (var s in forceStrum) {
                         if (s.tick > n.tick) break;
-                        if (n.tick >= s.tick && n.tick < (s.tick + s.sus))
-                        {
+                        if (n.tick >= s.tick && n.tick < (s.tick + s.sus)) {
                             check = true; break;
                         }
                     }
                 }
                 if (Program.eighthHopo && (tickDiff > 64 && tickDiff <= 96)) check = !check;
-            }
-            else /*if (tickDiff > hopoThresh || IsChord(n, notes) || SameNoteAsPrevious(n, notes))*/
-            { //not HOPO - look on forceHOPO
-                foreach (var hopo in forceHOPO)
-                {
+            } else /*if (tickDiff > hopoThresh || IsChord(n, notes) || SameNoteAsPrevious(n, notes))*/
+              { //not HOPO - look on forceHOPO
+                foreach (var hopo in forceHOPO) {
                     if (hopo.tick > n.tick) break;
-                    if (n.tick >= hopo.tick && n.tick < (hopo.tick + hopo.sus))
-                    {
+                    if (n.tick >= hopo.tick && n.tick < (hopo.tick + hopo.sus)) {
                         check = true;
                         if (Program.fixDoubleHopo && (SameNoteAsPrevious(n, notes, openNotes) || SameChordAsPrevious(n, notes))) { check = false; break; }
                         if (Program.dontForceChords && IsChord(n, notes)) check = false; break;
@@ -284,7 +250,7 @@ namespace mid2chart {
         private static bool SameChordAsPrevious(Note n, List<Event> notes) {
             if (!IsChord(n, notes)) return false;
             var previousNote = new Note(0, -1, 0);
-            for (var i = notes.IndexOf(n) - 1; i  >=  0; i--) {
+            for (var i = notes.IndexOf(n) - 1; i >= 0; i--) {
                 previousNote = notes[i] as Note;
                 if (previousNote != null && n.tick - previousNote.tick != 0) {
                     break;
@@ -325,17 +291,17 @@ namespace mid2chart {
         }
 
         public static List<Note> GetNotesFromChord(Note n, List<Event> notes) {
-            var chord = new List<Note> {n};
+            var chord = new List<Note> { n };
             var index = notes.IndexOf(n);
-            for (var i = index+1; i < notes.Count; i++) {
+            for (var i = index + 1; i < notes.Count; i++) {
                 var n2 = notes[i] as Note;
-                if (n2 != null && notes[i].tick-n.tick == 0) chord.Add(n2);
-                if (n2 != null && notes[i].tick-n.tick != 0) break;
+                if (n2 != null && notes[i].tick - n.tick == 0) chord.Add(n2);
+                if (n2 != null && notes[i].tick - n.tick != 0) break;
             }
-            for (var i = index-1; i >= 0; i--) {
+            for (var i = index - 1; i >= 0; i--) {
                 var n2 = notes[i] as Note;
-                if (n2 != null && notes[i].tick-n.tick == 0) chord.Add(n2);
-                if (n2 != null && notes[i].tick-n.tick != 0) break;
+                if (n2 != null && notes[i].tick - n.tick == 0) chord.Add(n2);
+                if (n2 != null && notes[i].tick - n.tick != 0) break;
             }
             return chord;
         }
@@ -345,7 +311,7 @@ namespace mid2chart {
                 return false;
             var previousChord = new List<Note>();
             Note previousNote = null;
-            for (var i = notes.IndexOf(n)-1; i >= 0; i--) {
+            for (var i = notes.IndexOf(n) - 1; i >= 0; i--) {
                 previousNote = notes[i] as Note;
                 if (previousNote != null)
                     break;
@@ -369,7 +335,7 @@ namespace mid2chart {
 
         private static bool SameNoteAsPrevious(Note n, List<Event> notes, List<NoteSection> openNotes) {
             if (notes.IndexOf(n) == 0) return false;
-            for (int i = notes.IndexOf(n)-1; i >= 0; i--) {
+            for (int i = notes.IndexOf(n) - 1; i >= 0; i--) {
                 var n2 = notes[i] as Note;
                 if (n2 != null) {
                     if (Program.readOpenNotes && IsTap(n, openNotes)) return IsTap(n2, openNotes);
@@ -385,26 +351,26 @@ namespace mid2chart {
             if (index == 0) {
                 for (var i = 1; i < notes.Count; i++) {
                     var n2 = notes[i] as Note;
-                    if (n2 != null) return notes[i].tick-n.tick == 0;
+                    if (n2 != null) return notes[i].tick - n.tick == 0;
                 }
             }
-            if (index == notes.Count-1) {
-                for (var i = notes.Count-2; i >= 0; i--) {
+            if (index == notes.Count - 1) {
+                for (var i = notes.Count - 2; i >= 0; i--) {
                     var n2 = notes[i] as Note;
-                    if (n2 != null) return notes[i].tick-n.tick == 0;
+                    if (n2 != null) return notes[i].tick - n.tick == 0;
                 }
             }
             bool check = false;
-            for (var i = index+1; i < notes.Count; i++) {
+            for (var i = index + 1; i < notes.Count; i++) {
                 var n2 = notes[i] as Note;
-                if (n2 != null && notes[i].tick-n.tick == 0) check = true;
-                if (n2 != null && notes[i].tick-n.tick != 0) break;
+                if (n2 != null && notes[i].tick - n.tick == 0) check = true;
+                if (n2 != null && notes[i].tick - n.tick != 0) break;
             }
             if (check) return check;
-            for (var i = index-1; i >= 0; i--) {
+            for (var i = index - 1; i >= 0; i--) {
                 var n2 = notes[i] as Note;
-                if (n2 != null && notes[i].tick-n.tick == 0) check = true;
-                if (n2 != null && notes[i].tick-n.tick != 0) break;
+                if (n2 != null && notes[i].tick - n.tick == 0) check = true;
+                if (n2 != null && notes[i].tick - n.tick != 0) break;
             }
             return check;
         }
@@ -412,12 +378,12 @@ namespace mid2chart {
         private static long GetPreviousNoteDiff(Note n, List<Event> notes) {
             if (notes[0] == n) return 192;
             else {
-                for (int i = notes.IndexOf(n)-1; i >= 0; i--) {
+                for (int i = notes.IndexOf(n) - 1; i >= 0; i--) {
                     var previousNote = notes[i] as Note;
-                    if (previousNote != null && n.tick-previousNote.tick != 0) {
-                        return n.tick-previousNote.tick;
+                    if (previousNote != null && n.tick - previousNote.tick != 0) {
+                        return n.tick - previousNote.tick;
                     }
-                        
+
                 }
             }
             return 192;
@@ -427,7 +393,7 @@ namespace mid2chart {
             bool check = false;
             foreach (NoteSection t in tap) {
                 if (t.tick > n.tick) break;
-                if (n.tick >= t.tick && n.tick < (t.tick+t.sus)) {
+                if (n.tick >= t.tick && n.tick < (t.tick + t.sus)) {
                     check = true; break;
                 }
             }
@@ -435,10 +401,10 @@ namespace mid2chart {
         }
 
         private static long GetNextNoteDiff(Note n, List<Event> notes) {
-            if (notes.IndexOf(n) == notes.Count-1) return 1;
-            for (int i = notes.IndexOf(n)+1; i < notes.Count; i++) {
+            if (notes.IndexOf(n) == notes.Count - 1) return 1;
+            for (int i = notes.IndexOf(n) + 1; i < notes.Count; i++) {
                 var nextNote = notes[i] as Note;
-                if (nextNote != null) return notes[i].tick-n.tick;
+                if (nextNote != null) return notes[i].tick - n.tick;
             }
             return 1;
         }

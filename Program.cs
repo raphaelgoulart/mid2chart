@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace mid2chart {
     static class Program {
-        internal static bool editable, rbLogic, broken, fixForces, fixSp, fixDoubleHopo, dontForceChords, 
+        internal static bool editable, rbLogic, broken, fixForces, fixSp, fixDoubleHopo, dontForceChords,
             fixOverlaps, eighthHopo, sixteenthStrum, keysOnBass, keysOnGuitar, bassOnGuitar,
-            gh1, skipPause, readOpenNotes, dontWriteDummy, dontForceOpenHopo, unforceNAudioStrictMode, tapToHopo;
+            gh1, skipPause, readOpenNotes, openNoteStrum, dontWriteDummy, unforceNAudioStrictMode, tapToHopo;
         static void Main(string[] args) {
             if (args.Length == 0) {
                 Console.WriteLine("Usage: drag and drop one or more .mid files into this executable file.");
@@ -26,7 +26,7 @@ namespace mid2chart {
                 Console.WriteLine("Use the parameter \"-k\" to skip the \"Press any key to exit\" message, and just exit.");
                 Console.WriteLine("Use the parameter \"-m\" to NOT write a (Dummy).chart file");
                 Console.WriteLine("Use the parameter \"-p\" to read and write open notes.");
-                Console.WriteLine("Use the parameter \"-oh\" to NOT force 1/12 (or closer) open notes as HO/POs. (Useless if -p isn't used)");
+                Console.WriteLine("Use the parameter \"-os\" to convert open notes as ");
                 Console.WriteLine("Use the parameter \"-kb\" to swap keys and bass when converting the midi.");
                 Console.WriteLine("Use the parameter \"-kg\" to swap keys and guitar when converting the midi.");
                 Console.WriteLine("Use the parameter \"-gb\" to swap guitar and bass when converting the midi.");
@@ -51,7 +51,7 @@ namespace mid2chart {
                         case "-k": skipPause = true; break;
                         case "-m": dontWriteDummy = true; break;
                         case "-p": readOpenNotes = true; break;
-                        case "-oh": dontForceOpenHopo = true; break;
+                        case "-os": openNoteStrum = true; break;
                         case "-kb":
                             if (!keysOnGuitar && !bassOnGuitar) keysOnBass = true;
                             else {
@@ -84,11 +84,11 @@ namespace mid2chart {
                         && (args[i] != "-c") && (args[i] != "-o") && (args[i] != "-8")
                         && (args[i] != "-16") && (args[i] != "-kb") && (args[i] != "-kg")
                         && (args[i] != "-gb") && (args[i] != "-1") && (args[i] != "-k")
-                        && (args[i] != "-p") && (args[i] != "-m") && (args[i] != "-oh")
+                        && (args[i] != "-p") && (args[i] != "-m") && (args[i] != "-os")
                         && (args[i] != "-u") && (args[i] != "-t")) {
                         try {
                             Stopwatch.Step("Reading midi: " + args[i]);
-                            Song s = MidReader.ReadMidi(args[i],unforceNAudioStrictMode);
+                            Song s = MidReader.ReadMidi(args[i], unforceNAudioStrictMode);
                             Stopwatch.EndStep();
                             Stopwatch.Step("Reading metadata from song.ini (if it exists)");
                             ReadMetadata(s, args[i]);
@@ -122,31 +122,31 @@ namespace mid2chart {
                                 Stopwatch.EndStep();
                             }
                             if (editable) {
-                                string filename = args[i].Substring(0, args[i].Length-4) + " (editable).chart";
+                                string filename = args[i].Substring(0, args[i].Length - 4) + " (editable).chart";
                                 Stopwatch.Step("Writing chart: " + filename);
                                 ChartWriter.WriteChart(s, filename, false);
                                 Stopwatch.EndStep();
                             } else {
                                 string filename;
                                 if (!dontWriteDummy && (s.tapGuitar.Count() > 0 || s.tapBass.Count() > 0)) {
-                                    filename = args[i].Substring(0, args[i].Length-4) + " (Dummy).chart";
+                                    filename = args[i].Substring(0, args[i].Length - 4) + " (Dummy).chart";
                                     Stopwatch.Step("Writing chart: " + filename);
                                     ChartWriter.WriteChart(s, filename, true);
                                     Stopwatch.EndStep();
                                 }
-                                filename = args[i].Substring(0, args[i].Length-3) + "chart";
+                                filename = args[i].Substring(0, args[i].Length - 3) + "chart";
                                 Stopwatch.Step("Writing chart: " + filename);
                                 ChartWriter.WriteChart(s, filename, false);
                                 Stopwatch.EndStep();
                                 Stopwatch.Stop();
                             }
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             Console.WriteLine(e);
                         }
                     }
                 }
             }
-            if (!skipPause) { 
+            if (!skipPause) {
                 Console.Write("Press any key to exit...");
                 Console.ReadKey();
             }
@@ -155,7 +155,7 @@ namespace mid2chart {
         private static void ReadMetadata(Song s, string path) {
             var pathArray = path.Split('\\');
             var newPath = "";
-            for (int i = 0; i < pathArray.Length-1; i++) {
+            for (int i = 0; i < pathArray.Length - 1; i++) {
                 newPath += pathArray[i] + "\\";
             }
             newPath += "song.ini";
@@ -165,7 +165,7 @@ namespace mid2chart {
                     StreamReader file = new StreamReader(newPath);
                     bool eighthHopo = false;
                     bool sixteenthStrum = false;
-                    while((line = file.ReadLine()) != null) {
+                    while ((line = file.ReadLine()) != null) {
                         var strArray = line.Split('=');
                         if (strArray.Length > 0) {
                             var attr = strArray[0].Trim();
@@ -176,7 +176,8 @@ namespace mid2chart {
                                 case "charter": s.charter = strArray[1].Trim(); break;
                                 case "delay": s.offset = long.Parse(strArray[1].Trim()); break;
                                 case "eighthnote_hopo": if (strArray[1].Trim() == "1") eighthHopo = true; break;
-                                case "hopo_frequency": if (strArray[1].Trim() == "250") eighthHopo = true;
+                                case "hopo_frequency":
+                                    if (strArray[1].Trim() == "250") eighthHopo = true;
                                     else if (strArray[1].Trim() == "80") sixteenthStrum = true;
                                     break;
                             }
@@ -185,7 +186,7 @@ namespace mid2chart {
                     if (eighthHopo) Program.eighthHopo = !Program.eighthHopo;
                     if (sixteenthStrum) Program.sixteenthStrum = !Program.sixteenthStrum;
                     file.Close();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Console.WriteLine("The song.ini file could not be read:");
                     Console.WriteLine(e.Message);
                 }
