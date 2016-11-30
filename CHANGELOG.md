@@ -1,7 +1,7 @@
 #Changelog
 
 #### 1.2 (25/11/2016)
-Adittions:
+Additions:
 * Added the -os parameter, to convert open notes as strum by default, unless forced otherwise.
 
 Improvements:
