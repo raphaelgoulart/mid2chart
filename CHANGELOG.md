@@ -1,5 +1,9 @@
 #Changelog
 
+#### 1.2.1 (24/03/2017)
+Bugfixes:
+* Fixes a bug on which the program would crash if a track in the midi file doesn't have a track name (its first event isn't a text event).
+
 #### 1.2 (25/11/2016)
 Additions:
 * Added the -os parameter, to convert open notes as strum by default, unless forced otherwise.
@@ -38,7 +42,7 @@ Additions:
 * Added the -oh parameter to NOT automatically force open notes that are 1/12 or closer to another note as open HO/POs (useless without -p).
 
 Bugfixes:
-- Fixes a bug on which a tap section that contained a single tap note might not be converted as a tap note in some cases.
+* Fixes a bug on which a tap section that contained a single tap note might not be converted as a tap note in some cases.
  
 *Addendum: as of right now, open notes are only compatible with GHPCED 2 (still not complete), and they work in the following fashion: N 7 0 will override any existing note (such as N 0 0), making it become an open strum. For an open HO/PO, one must use N 7 0 and N 5 0.
 
